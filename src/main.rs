@@ -6,7 +6,7 @@ use crossterm::cursor::{Hide, Show};
 use crossterm::event::{Event, KeyCode};
 use crossterm::terminal::{EnterAlternateScreen, LeaveAlternateScreen};
 use snake_rs::{common, game, MAP_SIZE, render};
-use snake_rs::common::Drawable;
+use snake_rs::common::{Direction, Drawable};
 use snake_rs::player::Player;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -35,10 +35,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                     KeyCode::Esc | KeyCode::Char('q') => {
                         break 'gameloop;
                     }
-                    KeyCode::Left => player.moveLeft(),
-                    KeyCode::Right => player.moveRight(),
-                    KeyCode::Up => player.moveUp(),
-                    KeyCode::Down => player.moveDown(),
+                    KeyCode::Left => player.direction = Direction::Left,
+                    KeyCode::Right => player.direction = Direction::Right,
+                    KeyCode::Up => player.direction = Direction::Up,
+                    KeyCode::Down => player.direction = Direction::Down,
                     _ => ()
                 }
             }

@@ -20,23 +20,23 @@ impl Player {
 
     pub fn move_to_direction(&mut self) {
         match self.direction {
-            Direction::Down => self.moveDown(),
-            Direction::Up => self.moveUp(),
-            Direction::Right => self.moveRight(),
-            Direction::Left => self.moveLeft(),
+            Direction::Down => self.move_down(),
+            Direction::Up => self.move_up(),
+            Direction::Right => self.move_right(),
+            Direction::Left => self.move_left(),
         }
     }
-
-    pub fn moveUp(&mut self) {
+    
+    fn move_up(&mut self) {
         self.body[0].y -= 1;
     }
-    pub fn moveDown(&mut self) {
+    fn move_down(&mut self) {
         self.body[0].y += 1;
     }
-    pub fn moveRight(&mut self) {
+    fn move_right(&mut self) {
         self.body[0].x += 1;
     }
-    pub fn moveLeft(&mut self) {
+    fn move_left(&mut self) {
         self.body[0].x -= 1;
     }
 }
