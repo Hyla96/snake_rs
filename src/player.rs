@@ -15,6 +15,30 @@ impl Player {
             direction: Direction::new_random(),
         }
     }
+
+    pub fn update(&mut self) {}
+
+    pub fn move_to_direction(&mut self) {
+        match self.direction {
+            Direction::Down => self.moveDown(),
+            Direction::Up => self.moveUp(),
+            Direction::Right => self.moveRight(),
+            Direction::Left => self.moveLeft(),
+        }
+    }
+
+    pub fn moveUp(&mut self) {
+        self.body[0].y -= 1;
+    }
+    pub fn moveDown(&mut self) {
+        self.body[0].y += 1;
+    }
+    pub fn moveRight(&mut self) {
+        self.body[0].x += 1;
+    }
+    pub fn moveLeft(&mut self) {
+        self.body[0].x -= 1;
+    }
 }
 
 impl Drawable for Player {
