@@ -154,7 +154,7 @@ impl Drawable for Player {
 
         let body_character = 'o';
 
-        for (i, e) in self.body.iter().enumerate() {
+        for (i, _) in self.body.iter().enumerate() {
             if i == 0 {
                 frame[self.body[0].x][self.body[0].y] = head_character;
             } else {

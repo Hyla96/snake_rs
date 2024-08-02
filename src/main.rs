@@ -5,9 +5,8 @@ use crossterm::{event, ExecutableCommand, terminal};
 use crossterm::cursor::{Hide, Show};
 use crossterm::event::{Event, KeyCode};
 use crossterm::terminal::{EnterAlternateScreen, LeaveAlternateScreen};
-use snake_rs::{common, game, MAP_SIZE, render};
-use snake_rs::common::{Direction, Drawable};
-use snake_rs::game::Game;
+use snake_rs::{common, MAP_SIZE, render};
+use snake_rs::common::{Direction};
 use snake_rs::player::Player;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -16,7 +15,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout.execute(EnterAlternateScreen)?;
     stdout.execute(Hide)?;
 
-    let game = Game::new("Gabriel".to_string());
     let mut player = Player::new(MAP_SIZE);
 
     let mut last_frame = common::new_frame();
