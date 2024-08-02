@@ -1,13 +1,12 @@
 use std::time::Duration;
 use rusty_time::Timer;
-use crate::{common, PLAYER_POSITION_INTERVAL};
+use crate::{PLAYER_POSITION_INTERVAL};
 use crate::common::{Direction, Drawable, Frame, Position};
-use crate::game::Game;
 
 pub struct Player {
-    pub body: Vec<common::Position>,
+    pub body: Vec<Position>,
     pub dead: bool,
-    direction: common::Direction,
+    direction: Direction,
     timer: Timer,
     map_size: usize,
 }
@@ -15,19 +14,35 @@ pub struct Player {
 
 impl Player {
     pub fn new(size: usize) -> Self {
+        let dir = Direction::new_random();
         Self {
-            body: Self::new_body(&size),
-            direction: Direction::new_random(),
+            body: Self::new_body(&size, &dir),
+            direction: dir,
             dead: false,
             timer: Timer::new(Duration::from_millis(PLAYER_POSITION_INTERVAL)),
             map_size: size,
         }
     }
 
-    fn new_body(size: &usize) -> Vec<Position> {
+    fn new_body(size: &usize, direction: &Direction) -> Vec<Position> {
         let head = Position::new_random(*size);
-        let body = vec![head];
+        let mut body = vec![head];
 
+        for i in 1..4 {
+            let pos: (usize, usize);
+
+            if *direction == Direction::Right {
+                pos = (body[0].x - i, body[0].y);
+            } else if *direction == Direction::Left {
+                pos = (body[0].x + i, body[0].y);
+            } else if *direction == Direction::Up {
+                pos = (body[0].x, body[0].y + i);
+            } else {
+                pos = (body[0].x, body[0].y - i);
+            };
+
+            body.push(Position::new(pos.0, pos.1))
+        }
 
         body
     }
@@ -68,45 +83,83 @@ impl Player {
         }
     }
 
+
+    fn reposition_body_elements(&mut self, new_head_position: Position) {
+        let mut prev = new_head_position;
+
+        for i in 0..self.body.len() {
+            let tmp = self.body[i].clone();
+            self.body[i] = prev;
+            prev = tmp;
+        }
+    }
     fn update_up(&mut self) -> bool {
         if self.body[0].y == 1 {
             return true;
         }
-        self.body[0].y -= 1;
+
+        self.reposition_body_elements(Position {
+            x: self.body[0].x,
+            y: self.body[0].y - 1,
+        });
+
         false
     }
     fn update_down(&mut self) -> bool {
         if self.body[0].y == self.map_size - 1 {
             return true;
         }
-        self.body[0].y += 1;
+
+        self.reposition_body_elements(Position {
+            x: self.body[0].x,
+            y: self.body[0].y + 1,
+        });
+
         false
     }
     fn update_right(&mut self) -> bool {
         if self.body[0].x == self.map_size - 1 {
             return true;
         }
-        self.body[0].x += 1;
+
+        self.reposition_body_elements(Position {
+            x: self.body[0].x + 1,
+            y: self.body[0].y,
+        });
+
         false
     }
     fn update_left(&mut self) -> bool {
         if self.body[0].x == 1 {
             return true;
         }
-        self.body[0].x -= 1;
+
+        self.reposition_body_elements(Position {
+            x: self.body[0].x - 1,
+            y: self.body[0].y,
+        });
+
         false
     }
 }
 
 impl Drawable for Player {
     fn draw(&self, frame: &mut Frame) {
-        let character = match self.direction {
+        let head_character = match self.direction {
             Direction::Left => '⊏',
             Direction::Down => '⊔',
             Direction::Up => '⊓',
             Direction::Right => '⊐',
         };
 
-        frame[self.body[0].x][self.body[0].y] = character;
+        let body_character = 'o';
+
+        for (i, e) in self.body.iter().enumerate() {
+            if i == 0 {
+                frame[self.body[0].x][self.body[0].y] = head_character;
+            } else {
+                frame[self.body[i].x][self.body[i].y] = body_character;
+            }
+        }
     }
 }

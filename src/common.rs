@@ -1,6 +1,8 @@
 use rand::{Rng};
 use crate::MAP_SIZE;
 
+
+#[derive(Clone, Debug)]
 pub struct Position {
     pub x: usize,
     pub y: usize,
@@ -16,9 +18,15 @@ impl Position {
             y,
         }
     }
+    pub fn new(x: usize, y: usize) -> Self {
+        Position {
+            x,
+            y,
+        }
+    }
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug)]
 pub enum Direction {
     Left,
     Up,
