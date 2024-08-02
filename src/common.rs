@@ -18,6 +18,7 @@ impl Position {
     }
 }
 
+#[derive(PartialEq)]
 pub enum Direction {
     Left,
     Up,
